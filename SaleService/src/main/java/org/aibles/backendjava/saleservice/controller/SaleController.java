@@ -1,8 +1,9 @@
 package org.aibles.backendjava.saleservice.controller;
 
 
+import org.aibles.backendjava.saleservice.dto.ProductDTO;
+import org.aibles.backendjava.saleservice.dto.ReviewDTO;
 import org.aibles.backendjava.saleservice.model.Product;
-import org.aibles.backendjava.saleservice.model.Review;
 import org.aibles.backendjava.saleservice.service.ProductService;
 import org.aibles.backendjava.saleservice.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.List;
 
 @RestController
@@ -28,15 +28,15 @@ public class SaleController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product){
-        final Product createdProduct = productService.createProduct(product);
+    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO){
+        final ProductDTO createdProduct = productService.createProduct(productDTO);
         return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<Product> updateProduct(@PathVariable("productId") int productId,
-                                                 @RequestBody Product product){
-        final Product updatedProduct = productService.updateProduct(productId, product);
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable("productId") int productId,
+                                                 @RequestBody ProductDTO productDTO){
+        final ProductDTO updatedProduct = productService.updateProduct(productId, productDTO);
         if (updatedProduct != null) {
             return  new ResponseEntity<>(updatedProduct, HttpStatus.OK);
         }
@@ -57,22 +57,21 @@ public class SaleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> listProduct(){
-        final List<Product> products = productService.listProduct();
+    public ResponseEntity<List<ProductDTO>> listProduct(){
+        final List<ProductDTO> products = productService.listProduct();
         return new ResponseEntity<>(products,HttpStatus.OK);
     }
 
     @PostMapping("/{productId}/reviews")
-    public  ResponseEntity<Review> createReview(@PathVariable("productId") int productId,
-                                                @RequestBody Review review) {
-        final Review createdReview = reviewService.createReview(productId, review);
+    public  ResponseEntity<ReviewDTO> createReview(@PathVariable("productId") int productId,
+                                                   @RequestBody ReviewDTO reviewDTO) {
+        final ReviewDTO createdReview = reviewService.createReview(productId, reviewDTO);
         return new ResponseEntity<>(createdReview, HttpStatus.CREATED);
     }
 
     @GetMapping("/{productId}/reviews")
-    public ResponseEntity<List<Review>> getReview(@PathVariable("productId") int productId){
-      final List<Review> reviews = reviewService.listReview(productId);
+    public ResponseEntity<List<ReviewDTO>> getReview(@PathVariable("productId") int productId){
+      final List<ReviewDTO> reviews = reviewService.listReview(productId);
       return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
-
 }

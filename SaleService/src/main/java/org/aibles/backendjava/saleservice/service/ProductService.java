@@ -1,17 +1,17 @@
 package org.aibles.backendjava.saleservice.service;
 
+import org.aibles.backendjava.saleservice.dto.ProductDTO;
 import org.aibles.backendjava.saleservice.model.Product;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 public interface ProductService {
 
-    Product createProduct(Product product);
+    ProductDTO createProduct(ProductDTO productDTO);
 
-    Product updateProduct(int productId, Product productReq);
+    ProductDTO updateProduct(int productId, ProductDTO productDTO);
 
     Product deleteProduct(int productId);
 
-    List<Product> listProduct();
+    List<ProductDTO> listProduct();
 }

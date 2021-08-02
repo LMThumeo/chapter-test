@@ -1,38 +1,44 @@
 package org.aibles.backendjava.saleservice.service.imp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.aibles.backendjava.saleservice.dto.ProductDTO;
 import org.aibles.backendjava.saleservice.model.Product;
 import org.aibles.backendjava.saleservice.repository.ProductRepository;
 import org.aibles.backendjava.saleservice.service.ProductService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImp implements ProductService {
 
     private final ProductRepository productRepository;
 
+    private final ModelMapper modelMapper;
+
     @Autowired
-    public ProductServiceImp(ProductRepository productRepository){
+    public ProductServiceImp(ProductRepository productRepository, ModelMapper modelMapper){
         this.productRepository = productRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
-    public Product createProduct(Product product) {
-        return productRepository.save(product);
+    public ProductDTO createProduct(ProductDTO productDTO) {
+        Product product = convertToEntity(productDTO);
+        return convertToDTO(productRepository.save(product));
     }
 
     @Override
-    public Product updateProduct(int productId, Product productReq) {
-
-       Product product = productRepository.findById(productId).orElse(null);
+    public ProductDTO updateProduct(int productId, ProductDTO productDTO) {
+        Product productReq = convertToEntity(productDTO);
+        Product product = productRepository.findById(productId).orElse(null);
         product.setName(productReq.getName());
         product.setOrigin(productReq.getOrigin());
         product.setPrice(productReq.getPrice());
         product.setQuantity(productReq.getQuantity());
-        return productRepository.save(product);
+        return convertToDTO(productRepository.save(product));
     }
 
     @Override
@@ -43,7 +49,17 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public List<Product> listProduct() {
-        return productRepository.findAll();
+    public List<ProductDTO> listProduct() {
+        return productRepository.findAll().stream()
+                .map(product -> convertToDTO(product))
+                .collect(Collectors.toList());
+    }
+
+    private Product convertToEntity(ProductDTO productDTO){
+        return modelMapper.map(productDTO, Product.class);
+    }
+
+    private ProductDTO convertToDTO(Product product){
+        return modelMapper.map(product, ProductDTO.class);
     }
 }
