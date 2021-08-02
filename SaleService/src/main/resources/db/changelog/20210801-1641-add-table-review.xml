@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="20210801-1641-001" author="ThuLM">
+        <createTable tableName="review">
+            <column name="id" type="INTEGER" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_review_id"/>
+            </column>
+            <column name="author" type="VARCHAR(256)"/>
+            <column name="comment" type="VARCHAR(256)"/>
+            <column name="star" type="INTEGER"/>
+            <column name="time" type="DATE"/>
+            <column name="product_id" type="INTEGER">
+                <constraints foreignKeyName="fk_review_product" references="product(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
