@@ -1,6 +1,7 @@
 package org.aibles.backendjava.saleservice.service.imp;
 
 import org.aibles.backendjava.saleservice.dto.ProductDTO;
+import org.aibles.backendjava.saleservice.exception.ProductNotFoundException;
 import org.aibles.backendjava.saleservice.model.Product;
 import org.aibles.backendjava.saleservice.repository.ProductRepository;
 import org.aibles.backendjava.saleservice.service.ProductService;
@@ -33,7 +34,7 @@ public class ProductServiceImp implements ProductService {
     @Override
     public ProductDTO updateProduct(int productId, ProductDTO productDTO) {
         Product productReq = convertToEntity(productDTO);
-        Product product = productRepository.findById(productId).orElse(null);
+        Product product = getProductById(productId);
         product.setName(productReq.getName());
         product.setOrigin(productReq.getOrigin());
         product.setPrice(productReq.getPrice());
@@ -43,7 +44,7 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public Product deleteProduct(int productId) {
-        Product product = productRepository.findById(productId).orElse(null);
+        Product product = getProductById(productId);
         productRepository.delete(product);
         return product;
     }
@@ -53,6 +54,10 @@ public class ProductServiceImp implements ProductService {
         return productRepository.findAll().stream()
                 .map(product -> convertToDTO(product))
                 .collect(Collectors.toList());
+    }
+
+    private Product getProductById(int productId){
+        return productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
     }
 
     private Product convertToEntity(ProductDTO productDTO){

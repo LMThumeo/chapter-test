@@ -1,6 +1,5 @@
 package org.aibles.backendjava.saleservice.controller;
 
-
 import org.aibles.backendjava.saleservice.dto.ProductDTO;
 import org.aibles.backendjava.saleservice.dto.ReviewDTO;
 import org.aibles.backendjava.saleservice.model.Product;
@@ -34,26 +33,16 @@ public class SaleController {
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable("productId") int productId,
+    public ResponseEntity<Void> updateProduct(@PathVariable("productId") int productId,
                                                  @RequestBody ProductDTO productDTO){
-        final ProductDTO updatedProduct = productService.updateProduct(productId, productDTO);
-        if (updatedProduct != null) {
-            return  new ResponseEntity<>(updatedProduct, HttpStatus.OK);
-        }
-        else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        productService.updateProduct(productId, productDTO);
+        return  new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{productId}")
     public ResponseEntity<Product> deleteProduct(@PathVariable("productId") int productId){
         final Product updatedProduct = productService.deleteProduct(productId);
-        if (updatedProduct != null) {
-            return  new ResponseEntity<>(updatedProduct, HttpStatus.OK);
-        }
-        else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return  new ResponseEntity<>(updatedProduct, HttpStatus.OK);
     }
 
     @GetMapping
