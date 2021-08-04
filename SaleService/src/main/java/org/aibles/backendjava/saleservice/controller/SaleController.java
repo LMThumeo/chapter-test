@@ -2,7 +2,6 @@ package org.aibles.backendjava.saleservice.controller;
 
 import org.aibles.backendjava.saleservice.dto.ProductDTO;
 import org.aibles.backendjava.saleservice.dto.ReviewDTO;
-import org.aibles.backendjava.saleservice.model.Product;
 import org.aibles.backendjava.saleservice.service.ProductService;
 import org.aibles.backendjava.saleservice.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,16 +32,16 @@ public class SaleController {
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<Void> updateProduct(@PathVariable("productId") int productId,
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable("productId") int productId,
                                                  @RequestBody ProductDTO productDTO){
-        productService.updateProduct(productId, productDTO);
-        return  new ResponseEntity<>(HttpStatus.OK);
+        final ProductDTO updatedProduct = productService.updateProduct(productId, productDTO);
+        return  new ResponseEntity<>(updatedProduct, HttpStatus.OK);
     }
 
     @DeleteMapping("/{productId}")
-    public ResponseEntity<Product> deleteProduct(@PathVariable("productId") int productId){
-        final Product updatedProduct = productService.deleteProduct(productId);
-        return  new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+    public ResponseEntity<Void> deleteProduct(@PathVariable("productId") int productId){
+        productService.deleteProduct(productId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping
