@@ -7,6 +7,9 @@ import org.aibles.backendjava.saleservice.repository.ProductRepository;
 import org.aibles.backendjava.saleservice.service.ProductService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,12 +29,14 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
+    @CachePut("products")
     public ProductDTO createProduct(ProductDTO productDTO) {
         Product product = convertToEntity(productDTO);
         return convertToDTO(productRepository.save(product));
     }
 
     @Override
+    @CachePut("products")
     public ProductDTO updateProduct(int productId, ProductDTO productDTO) {
         Product productReq = convertToEntity(productDTO);
         Product product = getProductById(productId);
@@ -43,6 +48,7 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
+    @CacheEvict("products")
     public Product deleteProduct(int productId) {
         Product product = getProductById(productId);
         productRepository.delete(product);
@@ -50,6 +56,7 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
+    @Cacheable("products")
     public List<ProductDTO> listProduct() {
         return productRepository.findAll().stream()
                 .map(product -> convertToDTO(product))

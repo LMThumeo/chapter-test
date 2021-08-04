@@ -9,6 +9,8 @@ import org.aibles.backendjava.saleservice.repository.ReviewRepository;
 import org.aibles.backendjava.saleservice.service.ReviewService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +32,7 @@ public class ReviewServiceImp implements ReviewService {
         this.modelMapper = modelMapper;
     }
     @Override
+    @CachePut("reviews")
     public ReviewDTO createReview(Integer productId, ReviewDTO reviewDTO) {
         Product product = getProductById(productId);
         Review review = convertToEntity(reviewDTO);
@@ -38,6 +41,7 @@ public class ReviewServiceImp implements ReviewService {
     }
 
     @Override
+    @Cacheable("reviews")
     public List<ReviewDTO> listReview(Integer productId) {
         Product product = getProductById(productId);
         return reviewRepository.findByProductId(productId).stream()
