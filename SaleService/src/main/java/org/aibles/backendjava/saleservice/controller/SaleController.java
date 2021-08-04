@@ -5,6 +5,7 @@ import org.aibles.backendjava.saleservice.dto.ReviewDTO;
 import org.aibles.backendjava.saleservice.service.ProductService;
 import org.aibles.backendjava.saleservice.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,7 @@ public class SaleController {
     }
 
     @PutMapping("/{productId}")
+    @CachePut(value = "products", key = "#productId")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable("productId") int productId,
                                                  @RequestBody ProductDTO productDTO){
         final ProductDTO updatedProduct = productService.updateProduct(productId, productDTO);

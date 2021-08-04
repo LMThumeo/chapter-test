@@ -32,7 +32,7 @@ public class ReviewServiceImp implements ReviewService {
         this.modelMapper = modelMapper;
     }
     @Override
-    @CachePut("reviews")
+    @CachePut(cacheNames = "reviews")
     public ReviewDTO createReview(Integer productId, ReviewDTO reviewDTO) {
         Product product = getProductById(productId);
         Review review = convertToEntity(reviewDTO);
@@ -41,7 +41,7 @@ public class ReviewServiceImp implements ReviewService {
     }
 
     @Override
-    @Cacheable("reviews")
+    @Cacheable(cacheNames = "reviews")
     public List<ReviewDTO> listReview(Integer productId) {
         Product product = getProductById(productId);
         return reviewRepository.findByProductId(productId).stream()

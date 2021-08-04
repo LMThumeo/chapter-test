@@ -29,14 +29,14 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    @CachePut("products")
+    @CachePut(value = "products")
     public ProductDTO createProduct(ProductDTO productDTO) {
         Product product = convertToEntity(productDTO);
         return convertToDTO(productRepository.save(product));
     }
 
     @Override
-    @CachePut("products")
+    @CachePut(value = "products")
     public ProductDTO updateProduct(int productId, ProductDTO productDTO) {
         Product productReq = convertToEntity(productDTO);
         Product product = getProductById(productId);
@@ -48,7 +48,7 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    @CacheEvict("products")
+    @CacheEvict(value = "products")
     public Product deleteProduct(int productId) {
         Product product = getProductById(productId);
         productRepository.delete(product);
@@ -56,7 +56,7 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    @Cacheable("products")
+    @Cacheable(value = "products")
     public List<ProductDTO> listProduct() {
         return productRepository.findAll().stream()
                 .map(product -> convertToDTO(product))
